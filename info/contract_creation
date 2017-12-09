@@ -1,0 +1,12 @@
+[12-03|11:03:36] Submitted contract creation              fullhash=0x12e012d50645f94a064e7455f48007e0b4f61b741ee2d699b57ec1167645d267 contract=0xf89d356809814b11a5708606be19b5c310870879
+INFO [12-03|11:03:36] Submitted contract creation              fullhash=0xca696f41293e535514b56add4342cc8ff47d4af2e905dc4895f74981bae6818a contract=0x2416775c010b082df889a09de2288ebe3416c53d
+
+
+geth --datadir="./tmp/eth/01" init config/genesis.json
+geth --datadir="./tmp/eth/01" --verbosity 6 --ipcdisable --port 30302 --rpcport 8501 --networkid 1000 console 2>> ./tmp/eth/01.log
+
+geth --datadir="./tmp/eth/01" --verbosity 4 --ipcdisable --port 30302 --rpcport 8501 --networkid 1000 --bootnodes enode://185513e3f1a9ed56ef6e4798fc093c1a19763c55c37581e9a0250373a38430a1d29d7bfeae418893a73fc585a708d350e837aa09f3aac6e1c4514c261b90c811@127.0.0.1:30301
+
+
+admin.addPeer("enode://965b55dadc9b8f53976d1e748add16b45cbc920bc2316791c775439df7db4e04db0a324df1e96dfe58f94d2d9f8686e8403c5359ce187c0fbe04c02e73592647@127.0.0.1:30303")
+

@@ -1,0 +1,8 @@
+echo Compiling Sol files
+solc --abi --bin --overwrite ./src/policy.sol --output-dir ./target/sol
+
+ls ./target/sol -l
+
+echo Copy install JS scripts
+
+cp -r ./build/* ./target
