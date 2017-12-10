@@ -46,7 +46,7 @@ async.waterfall(
 
 			callback(null, config, policyBin, policyAbi);
 		},
-		function(config, policyBin, policyAbi, callback){
+		function(config, policyBin, policyAbi, callbackFunct1){
 			// Interface of Agent 01
 			var web3Agent01 = new Web3(
 			    new Web3.providers.HttpProvider('http://localhost:8501')
@@ -58,8 +58,7 @@ async.waterfall(
 			web3Agent01.personal.unlockAccount(config.agents.agent_01.account, config.agents.agent_01.password);
 
 			var policyContractObj = web3Agent01.eth.contract(policyAbi);
-			//var policyContractObj = web3Agent01.eth.contract([{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"}]);
-
+			
 			var policy = policyContractObj.new(
 			   {
 			     from: config.agents.agent_01.account,
@@ -69,18 +68,17 @@ async.waterfall(
 			   	if (err) throw err;
 
 			   	if (typeof contract.address !== 'undefined') {
-			         console.log('Policy contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+			       console.log('Policy contract mined wiht address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+			       callbackFunct1(err, config, contract);  
 			    }
-
-			   	//console.log(JSON.stringify(contract));
-			   	 callback(err, contract);
 			 });
 		},
-		function(contract, callback){
-				policyContract = contract;
-			    if (typeof contract.address !== 'undefined') {
-			         console.log('Policy contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
-			    } 
+		function(config, contract, callback){
+			console.log("Step 01: Policy propoused");	
+
+			console.log(config.company.consolidatedAccount.account);
+			var result = contract.initPolicy(config.insureds.insured_01.account, config.company.consolidatedAccount.account);
+			console.log(result) 
 		}
 	],
 	function(err, file) {}
