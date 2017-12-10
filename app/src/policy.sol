@@ -1,13 +1,9 @@
 pragma solidity ^0.4.8;
 
-contract Test {
+contract Policy {
     uint256 public value;
 
-    function Test() {
+    function Policy() {
         value = 123;    
-    }
-
-    function Test1(){
-
     }
 }

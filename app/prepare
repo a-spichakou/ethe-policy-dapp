@@ -12,3 +12,4 @@ npm link web3
 npm link ethereumjs-util
 npm link ethereumjs-tx
 npm link eth-lightwallet
+npm link async

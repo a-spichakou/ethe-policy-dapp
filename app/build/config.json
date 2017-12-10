@@ -1,0 +1,41 @@
+{
+	"company": [
+		{
+			"consolidatedAccount": {
+				"account": "0x5DFE021F45f00Ae83B0aA963bE44A1310a782fCC",
+				"password": "iloveethereum",
+				"description": "Main consolidated account"
+			}
+		}
+	],
+	"agents": {
+		"agent_01": {
+			"account": "0x9F3A4BBeD4660F2DCCd6E980e2FaA6d6214E5Dc8",
+			"password": "iloveethereum"
+		},
+		"agent_02": {
+			"account": "0xc10261166b4699D3c1535Aa30AC29446c755f065",
+			"password": "iloveethereum"
+		}
+	},
+	"insureds": [
+		{
+			"insured_01": {
+				"account": "0xFE2b768a23948EDDD7D7Caea55bAa31E39045382",
+				"password": "iloveethereum"
+			},
+			"insured_02": {
+				"account": "0xA9a418dA22532Bd1189fF8Be5Cdaf3570bF9da43",
+				"password": "iloveethereum"
+			}
+		}
+	],
+	"claimOracle": [
+		{
+			"claimOracleAccount": {
+				"account": "0xCC52165260FB50dA8Fc9fEd714e33884D324f7Dd",
+				"password": "iloveethereum"
+			}
+		}
+	]
+}

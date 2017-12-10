@@ -1,10 +1,10 @@
-geth --datadir="./tmp/eth/01" \
+geth --datadir="./tmp/eth/03" \
 --verbosity 4 \
 --ipcdisable \
 --rpc \
 --rpcapi "admin,debug,eth,miner,net,personal,shh,txpool,web3" \
---port 30101 \
---rpcport 8501 \
+--port 30103 \
+--rpcport 8503 \
 --networkid 1000 \
 --bootnodes enode://185513e3f1a9ed56ef6e4798fc093c1a19763c55c37581e9a0250373a38430a1d29d7bfeae418893a73fc585a708d350e837aa09f3aac6e1c4514c261b90c811@127.0.0.1:30301 \
-console 2>> ./tmp/eth/01.log
+console 2>> ./tmp/eth/03.log
