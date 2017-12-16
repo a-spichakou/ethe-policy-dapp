@@ -9,15 +9,15 @@ contract Policy {
 	string status;
 
     modifier onlyAgent() {
-    	if (msg.sender != agent) { throw; }
+    	assert(msg.sender == agent);
     	_; // Will be replaced with function body
 	}
 	modifier onlyInsured() {
-    	if (msg.sender != agent) { throw; }
+		assert(msg.sender == insured);
     	_; // Will be replaced with function body
 	}
 	modifier onlyCompany() {
-    	if (msg.sender != agent) { throw; }
+		assert(msg.sender == company);
     	_; // Will be replaced with function body
 	}
 
@@ -41,5 +41,16 @@ contract Policy {
 	function purchase() onlyInsured(){
 		status = 'Policy active';
 	}
+
+	function getInsured() onlyAgent() constant returns (address) {
+		return insured;
+	}
+
+	function getAgent() onlyInsured() constant returns (address) {
+		return agent;
+	}
 	
+	function getStatus() constant returns (string) {
+		return status;
+	}
 }
