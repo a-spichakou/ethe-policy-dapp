@@ -1,4 +1,4 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.13;
 
 contract Policy {
 	address agent;
@@ -7,6 +7,10 @@ contract Policy {
 	address company;
 
 	string status;
+
+	uint premium;
+
+	//mapping (address => uint) balances;
 
     modifier onlyAgent() {
     	assert(msg.sender == agent);
@@ -21,25 +25,39 @@ contract Policy {
     	_; // Will be replaced with function body
 	}
 
+	event Purchase(address from, uint required, uint recived);
+	event Init(address insuredVal, address companyVal, uint premiumVal);
+	event Propouse();
+	event Accept();
+
     function Policy() {
         agent = msg.sender;    
     }
 
-    function initPolicy (address insuredVal, address companyVal) onlyAgent() {
+    function initPolicy (address insuredVal, address companyVal, uint premiumVal) onlyAgent() {
 	    insured = insuredVal;
 	    company = companyVal;
+	    premium = premiumVal;
+
+	    Init(insuredVal, companyVal, premiumVal);
 	}
 
 	function propouse () onlyAgent() {
 	    status = 'Policy propoused';
+	    Propouse();
 	}
 
 	function accept() onlyInsured(){
 		status = 'Policy accepted';
+		Accept();
 	}
 
-	function purchase() onlyInsured(){
-		status = 'Policy active';
+	function purchase() onlyInsured() payable {
+	
+		company.transfer(msg.value);
+             
+	    status = 'Policy active';
+		Purchase(msg.sender, premium, msg.value);
 	}
 
 	function getInsured() onlyAgent() constant returns (address) {

@@ -53,17 +53,28 @@ async.waterfall(
 			// must unlock the account we are creating the contract from so we can spend its ether
 			web3Agent01.personal.unlockAccount(config.agents.agent_01.account, config.agents.agent_01.password);
 
-			var contract = web3Agent01.eth.contract(policyAbi).at('0xdbee0672b57dacc242fb15208ed5050326bff5d3');
+			console.log("Contract address used: "+process.argv[2]);
+			var contract = web3Agent01.eth.contract(policyAbi).at(process.argv[2]);
+			callback(null, config, contract);
 			
-			var result = contract.getInsured({from: config.agents.agent_01.account},
-				function(err, data) {
-					if (err) throw err;
-
-					console.log("Step 01: Check status");
-					console.log(data);
-				}
-			);
+		},
+		function(config, contract, callback){
+			printAllEvents(config, contract, callback);
 		}
 	],
 	function(err, file) {}
 );
+
+function printAllEvents(config, contract, callback){
+	console.log("Reading from block: " + process.argv[3]);
+
+	let events = contract.allEvents({fromBlock: process.argv[3], toBlock: 'latest'})
+	events.get(function(err, data){
+		console.log(data);
+		console.log(data[0].args.avaliable.toNumber());
+		console.log(data[0].args.required.toNumber());
+		console.log(data[0].args.agent.toNumber());
+
+		callback(null, config, contract);
+	});
+}

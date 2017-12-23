@@ -53,7 +53,7 @@ async.waterfall(
 
 			callback(null, config, policyBin, policyAbi);
 		},
-		function(config, policyBin, policyAbi, callbackFunct){
+		function(config, policyBin, policyAbi, callback){
 
 
 			console.log("Step 01: Policy contract deploing");
@@ -73,7 +73,7 @@ async.waterfall(
 
 			   	if (typeof contract.address !== 'undefined') {
 			       console.log('Step 01: Policy contract mined with address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
-			       callbackFunct(err, config, contract);  
+			       callback(err, config, contract);  
 			    }
 			 });
 		},
@@ -81,7 +81,7 @@ async.waterfall(
 
 			var result = contract.initPolicy(
 				config.insureds.insured_01.account,
-				config.company.consolidatedAccount.account, {from: config.agents.agent_01.account},
+				config.company.consolidatedAccount.account, 1, {from: config.agents.agent_01.account},
 				function(err, data) {
 					if (err) throw err;
 
@@ -103,7 +103,13 @@ async.waterfall(
 
 		},
 		function(config, contract, callback){
-			waitDataUpdated(config, contract, 'Policy propoused', callback);
+			var propouseEvent = contract.Propouse({},
+				function(err, data){
+					if (err) throw err;
+
+					console.log("Step 01: Recived Propouse event");
+					callback(err, config, contract);
+				});
 		},
 		function(config, contract, callback){
 
@@ -115,32 +121,70 @@ async.waterfall(
 					if (err) throw err;
 
 					console.log("Step 02: Insured 01 accepts Contract");
-					callback(err, config, contract);
+					callback(err, config, contract, insuredContract);
 				}
 			);
 		},
-		function(config, contract, callback){
-			waitDataUpdated(config, contract, 'Policy accepted', callback);
-		}	
+		function(config, contract, insuredContract, callback){
+			var propouseEvent = contract.Accept({},
+				function(err, data){
+					if (err) throw err;
+
+					console.log("Step 02: Recived Accept event");
+					callback(err, config, contract, insuredContract);
+				});
+		},
+		function(config, contract, insuredContract, callback){
+			var event = insuredContract.purchase({from: config.insureds.insured_01.account, value: 1},
+				function(err, data) {
+					if (err) throw err;
+
+					console.log("Step 03: Insured 01 pays for Premium and Contract became Active transactionHash: " + data);
+					callback(err, config, contract, insuredContract);
+				}
+			);
+		},
+		function(config, contract, insuredContract, callback){
+			var propouseEvent = contract.Purchase({},
+				function(err, data){
+					if (err) throw err;
+
+					console.log("Step 03: Recived Purchase event");
+					callback(err, config, contract, insuredContract);
+				});
+		},
+		function printAllEvents(config, contract, insuredContract, callback){
+			let events = contract.allEvents({fromBlock: 0, toBlock: 'latest'})
+			events.get(function(err, data){
+				console.log(data)
+				callback(null, null);
+			});
+		}
 	],
 	function(err, file) {}
 );
 
-//console.log("Step 03: Insured 01 pays for Premium and Contract became Active");
-
 //console.log("Step 04: Insured 01 makes Claim");
 
 //console.log("Step 05: Claim Oracle confirms Claim and comapy pays Insured 01");
-function waitDataUpdated(config, contract, expectingValue, callback) {
+function waitDataUpdated(config, contract, expectingValue, insuredContract, callback) {
 	contract.getStatus({ from: config.agents.agent_01.account }, function(err,data) {
 		console.log("Checking status: expecting '" + expectingValue + "'...");
 		console.log(data);
 
 		if (data !== expectingValue) {
 			sleep.sleep(5);
-			waitDataUpdated(config, contract, expectingValue, callback);
+			waitDataUpdated(config, contract, expectingValue, insuredContract, callback);
 		} else {
-			callback(null, config, contract);
+			callback(null, config, contract, insuredContract);
 		}
 	});				
+}
+
+function printAllEvents(config, contract, insuredContract, callback){
+	let events = contract.allEvents({fromBlock: 0, toBlock: 'latest'})
+	events.get(function(err, data){
+		console.log(data)
+		callback(null, config, contract, insuredContract);
+	});
 }
