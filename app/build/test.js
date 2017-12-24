@@ -26,7 +26,7 @@ async.waterfall(
 			callback(null, config);
 		},
 		function(config, callback){
-			fs.readFile( __dirname + '/sol/Policy.bin', 'utf8', function (err, data) {
+			fs.readFile( __dirname + '/sol/ClaimOracleDispatch.bin', 'utf8', function (err, data) {
 				if (err) throw err;
 				callback(err, config, data);
 			});
@@ -38,7 +38,7 @@ async.waterfall(
 			callback(null, config, policyBin);
 		},
 		function(config, policyBin, callback){
-			fs.readFile( __dirname + '/sol/Policy.abi', 'utf8', function (err, data) {
+			fs.readFile( __dirname + '/sol/ClaimOracleDispatch.abi', 'utf8', function (err, data) {
 				if (err) throw err;
 				callback(err, config, policyBin, data);
 			});
@@ -57,7 +57,7 @@ async.waterfall(
 			var contract = web3Agent01.eth.contract(policyAbi).at(process.argv[2]);
 			callback(null, config, contract);
 			
-		},function(config, contract, callback){
+		}/*,function(config, contract, callback){
 
 			var gasRequired = contract.reportClaim.estimateGas('Claim 1 Report',
 				{from: config.agents.agent_01.account}
@@ -65,7 +65,7 @@ async.waterfall(
 			console.log(gasRequired);
 
 			var event = contract.reportClaim('Claim 1 Report',
-				{from: config.agents.agent_01.account, gas: '9900000'},
+				{from: config.agents.agent_01.account, gas: '2338683698'},
 				function(err, data) {
 					if (err) throw err;
 
@@ -73,7 +73,7 @@ async.waterfall(
 					callback(err, config, contract);
 				}
 			);
-		},
+		}*/,
 		function(config, contract, callback){
 			printAllEvents(config, contract, callback);
 		}

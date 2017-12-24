@@ -29,7 +29,7 @@ contract Policy is usingClaimOracle {
 	}
 
 	event Purchase(address from, uint required, uint recived);
-	event Init(address insuredVal, address companyVal, uint premiumVal, address claimOracleVal);
+	event Init(address insuredVal, address companyVal, uint premiumVal);
 	event Propouse();
 	event Accept();
 	event ClaimReported(bytes claimData);
@@ -39,14 +39,13 @@ contract Policy is usingClaimOracle {
         agent = msg.sender;    
     }
 
-    function initPolicy (address insuredVal, address companyVal, uint premiumVal, address claimOracleVal) onlyAgent() {
+    function initPolicy (address insuredVal, address companyVal, uint premiumVal) onlyAgent() {
 	    
 	    insured = insuredVal;
 	    company = companyVal;
 	    premium = premiumVal;
-	    lookupContract = claimOracleVal;
-
-	    Init(insuredVal, companyVal, premiumVal, claimOracleVal);
+	    
+	    Init(insuredVal, companyVal, premiumVal);
 	}
 
 	function propouse () onlyAgent() {

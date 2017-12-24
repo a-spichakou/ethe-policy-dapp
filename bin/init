@@ -3,15 +3,16 @@ mkdir .datadir
 cp -r config/keystore .datadir
 geth --datadir .datadir init config/genesis.json
 
-rm -rf .datadir ./tmp/eth
+rm -rf ./tmp/eth
+mkdir ./tmp/eth
 mkdir ./tmp/eth/01
 mkdir ./tmp/eth/02
 mkdir ./tmp/eth/03
 
-cp -r config/keystore01 ./tmp/eth/01
-cp -r config/keystore02 ./tmp/eth/02
-cp -r config/keystore03 ./tmp/eth/03
-
 geth --datadir="./tmp/eth/01" init config/genesis.json
 geth --datadir="./tmp/eth/02" init config/genesis.json
 geth --datadir="./tmp/eth/03" init config/genesis.json
+
+cp -r config/keystore01/* ./tmp/eth/01/keystore
+cp -r config/keystore02/* ./tmp/eth/02/keystore
+cp -r config/keystore03/* ./tmp/eth/03/keystore

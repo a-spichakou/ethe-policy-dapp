@@ -14,3 +14,5 @@ npm link ethereumjs-tx
 npm link eth-lightwallet
 npm link async
 npm link sleep
+npm link replace-in-file
+npm link fs-extra

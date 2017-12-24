@@ -78,24 +78,11 @@ async.waterfall(
 			 });
 		},
 		function(config, contract, callback){
-			fs.readFile( __dirname + "/.claimOracleLookupContract.json", 'utf8', function (err, data) {
-				if (err) throw err;
-				callback(err, config, contract, data);
-			});
-		},
-		function(config, contract, data, callback) {
-			var claimOracleData = JSON.parse(data);
-			console.log("Step 01: Claim Oracle data:" + data);
-
-			callback(null, config, contract, claimOracleData);
-		},
-		function(config, contract, claimOracleData, callback){
 
 			var result = contract.initPolicy(
 				config.insureds.insured_01.account,
 				config.company.consolidatedAccount.account,  
 				1, 
-				config.claimOracle.claimOracleAccount.account,
 				{from: config.agents.agent_01.account, gas: '4700000'},
 				function(err, data) {
 					if (err) throw err;
