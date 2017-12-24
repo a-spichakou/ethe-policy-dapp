@@ -57,6 +57,22 @@ async.waterfall(
 			var contract = web3Agent01.eth.contract(policyAbi).at(process.argv[2]);
 			callback(null, config, contract);
 			
+		},function(config, contract, callback){
+
+			var gasRequired = contract.reportClaim.estimateGas('Claim 1 Report',
+				{from: config.agents.agent_01.account}
+				);
+			console.log(gasRequired);
+
+			var event = contract.reportClaim('Claim 1 Report',
+				{from: config.agents.agent_01.account, gas: '9900000'},
+				function(err, data) {
+					if (err) throw err;
+
+					console.log("Step 04: Insured 01 report Claim: " + data);
+					callback(err, config, contract);
+				}
+			);
 		},
 		function(config, contract, callback){
 			printAllEvents(config, contract, callback);
@@ -71,9 +87,9 @@ function printAllEvents(config, contract, callback){
 	let events = contract.allEvents({fromBlock: process.argv[3], toBlock: 'latest'})
 	events.get(function(err, data){
 		console.log(data);
-		console.log(data[0].args.avaliable.toNumber());
+		/*console.log(data[0].args.avaliable.toNumber());
 		console.log(data[0].args.required.toNumber());
-		console.log(data[0].args.agent.toNumber());
+		console.log(data[0].args.agent.toNumber());*/
 
 		callback(null, config, contract);
 	});

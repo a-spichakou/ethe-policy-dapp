@@ -22,16 +22,14 @@
 			"password": "iloveethereum"
 		},
 		"insured_02": {
-			"account": "0xA9a418dA22532Bd1189fF8Be5Cdaf3570bF9da43",
+			"account": "0xCC52165260FB50dA8Fc9fEd714e33884D324f7Dd",
 			"password": "iloveethereum"
 		}
 	},
-	"claimOracle": [
-		{
+	"claimOracle": {
 			"claimOracleAccount": {
-				"account": "0xCC52165260FB50dA8Fc9fEd714e33884D324f7Dd",
+				"account": "0xA9a418dA22532Bd1189fF8Be5Cdaf3570bF9da43",
 				"password": "iloveethereum"
 			}
 		}
-	]
 }

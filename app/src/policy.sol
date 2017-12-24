@@ -1,6 +1,9 @@
 pragma solidity ^0.4.13;
 
-contract Policy {
+
+import "./claimapi.sol";
+
+contract Policy is usingClaimOracle {
 	address agent;
 	address insured;
 
@@ -10,7 +13,7 @@ contract Policy {
 
 	uint premium;
 
-	//mapping (address => uint) balances;
+	bytes public response;
 
     modifier onlyAgent() {
     	assert(msg.sender == agent);
@@ -26,20 +29,24 @@ contract Policy {
 	}
 
 	event Purchase(address from, uint required, uint recived);
-	event Init(address insuredVal, address companyVal, uint premiumVal);
+	event Init(address insuredVal, address companyVal, uint premiumVal, address claimOracleVal);
 	event Propouse();
 	event Accept();
+	event ClaimReported(bytes claimData);
+	event EventFromClaimOracle(bytes _response);
 
     function Policy() {
         agent = msg.sender;    
     }
 
-    function initPolicy (address insuredVal, address companyVal, uint premiumVal) onlyAgent() {
+    function initPolicy (address insuredVal, address companyVal, uint premiumVal, address claimOracleVal) onlyAgent() {
+	    
 	    insured = insuredVal;
 	    company = companyVal;
 	    premium = premiumVal;
+	    lookupContract = claimOracleVal;
 
-	    Init(insuredVal, companyVal, premiumVal);
+	    Init(insuredVal, companyVal, premiumVal, claimOracleVal);
 	}
 
 	function propouse () onlyAgent() {
@@ -59,6 +66,16 @@ contract Policy {
 	    status = 'Policy active';
 		Purchase(msg.sender, premium, msg.value);
 	}
+
+	function reportClaim(string claimData){
+		ClaimReported(bytes(claimData));
+		queryClaimOracle(bytes(claimData));
+	}
+
+	function __claimOracleCallback(uint256 id, bytes _response) onlyFromClaimOracle external {
+    	response = _response;
+    	EventFromClaimOracle(response);
+  	}
 
 	function getInsured() onlyAgent() constant returns (address) {
 		return insured;

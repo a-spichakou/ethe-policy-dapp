@@ -78,10 +78,25 @@ async.waterfall(
 			 });
 		},
 		function(config, contract, callback){
+			fs.readFile( __dirname + "/.claimOracleLookupContract.json", 'utf8', function (err, data) {
+				if (err) throw err;
+				callback(err, config, contract, data);
+			});
+		},
+		function(config, contract, data, callback) {
+			var claimOracleData = JSON.parse(data);
+			console.log("Step 01: Claim Oracle data:" + data);
+
+			callback(null, config, contract, claimOracleData);
+		},
+		function(config, contract, claimOracleData, callback){
 
 			var result = contract.initPolicy(
 				config.insureds.insured_01.account,
-				config.company.consolidatedAccount.account, 1, {from: config.agents.agent_01.account},
+				config.company.consolidatedAccount.account,  
+				1, 
+				config.claimOracle.claimOracleAccount.account,
+				{from: config.agents.agent_01.account, gas: '4700000'},
 				function(err, data) {
 					if (err) throw err;
 
@@ -103,7 +118,7 @@ async.waterfall(
 
 		},
 		function(config, contract, callback){
-			var propouseEvent = contract.Propouse({},
+			var event = contract.Propouse({},
 				function(err, data){
 					if (err) throw err;
 
@@ -126,7 +141,7 @@ async.waterfall(
 			);
 		},
 		function(config, contract, insuredContract, callback){
-			var propouseEvent = contract.Accept({},
+			var event = contract.Accept({},
 				function(err, data){
 					if (err) throw err;
 
@@ -145,7 +160,7 @@ async.waterfall(
 			);
 		},
 		function(config, contract, insuredContract, callback){
-			var propouseEvent = contract.Purchase({},
+			var event = contract.Purchase({},
 				function(err, data){
 					if (err) throw err;
 
@@ -153,7 +168,36 @@ async.waterfall(
 					callback(err, config, contract, insuredContract);
 				});
 		},
-		function printAllEvents(config, contract, insuredContract, callback){
+		function(config, contract, insuredContract, callback){
+			var event = insuredContract.reportClaim('Claim 1 Report',
+				{from: config.insureds.insured_01.account, gas: '4700000'},
+				function(err, data) {
+					if (err) throw err;
+
+					console.log("Step 04: Insured 01 report Claim: " + data);
+					callback(err, config, contract, insuredContract);
+				}
+			);
+		},
+		function(config, contract, insuredContract, callback){
+			var event = contract.ClaimReported({},
+				function(err, data){
+					if (err) throw err;
+
+					console.log("Step 04: Recived Claim reported event");
+					callback(err, config, contract, insuredContract);
+				});
+		},
+		function(config, contract, insuredContract, callback){
+			var event = contract.EventFromClaimOracle({},
+				function(err, data){
+					if (err) throw err;
+
+					console.log("Step 04: Recived EventFromClaimOracle");
+					callback(err, config, contract, insuredContract);
+				});
+		},
+		function(config, contract, insuredContract, callback){
 			let events = contract.allEvents({fromBlock: 0, toBlock: 'latest'})
 			events.get(function(err, data){
 				console.log(data)
@@ -167,24 +211,3 @@ async.waterfall(
 //console.log("Step 04: Insured 01 makes Claim");
 
 //console.log("Step 05: Claim Oracle confirms Claim and comapy pays Insured 01");
-function waitDataUpdated(config, contract, expectingValue, insuredContract, callback) {
-	contract.getStatus({ from: config.agents.agent_01.account }, function(err,data) {
-		console.log("Checking status: expecting '" + expectingValue + "'...");
-		console.log(data);
-
-		if (data !== expectingValue) {
-			sleep.sleep(5);
-			waitDataUpdated(config, contract, expectingValue, insuredContract, callback);
-		} else {
-			callback(null, config, contract, insuredContract);
-		}
-	});				
-}
-
-function printAllEvents(config, contract, insuredContract, callback){
-	let events = contract.allEvents({fromBlock: 0, toBlock: 'latest'})
-	events.get(function(err, data){
-		console.log(data)
-		callback(null, config, contract, insuredContract);
-	});
-}
