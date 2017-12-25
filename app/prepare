@@ -3,16 +3,11 @@ rm -rf ./target
 echo Creating target folder
 mkdir ./target
 
-echo Installing required modules globally
-#npm i -g web3 ethereumjs-util ethereumjs-tx eth-lightwallet
-
 cd ./target
+echo Installing required modules
+npm i web3 async replace-in-file keccak
 
-npm link web3
-#npm link ethereumjs-util
-#npm link ethereumjs-tx
-#npm link eth-lightwallet
-npm link async
-npm link replace-in-file
-npm link fs-extra
-npm link keccak
+#npm link web3
+#npm link async
+#npm link replace-in-file
+#npm link keccak
