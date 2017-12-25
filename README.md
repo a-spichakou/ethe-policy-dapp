@@ -80,6 +80,7 @@ At this point need to start claims service that should confirm Claims reported:
 Demoscript should be run from ./app direcory. Firstly, compile Policy contract:
 
 > ./make
+
 And finally, start demo:
 
 > node ./target/demo.js
