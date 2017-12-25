@@ -16,7 +16,7 @@ contract ClaimOracleLookup {
 
 // The actual part to be included in a client contract
 contract usingClaimOracle {
-  address constant lookupContract = 0x272590c06b306e320a97c832dc35a4f5d772aa0c;
+  address constant lookupContract = 0x2696F3Eb9537A93119BEF0636703ac23B375baB5;
   event ClaimOracleLookedUp(address claimOracleAddress);
 
   modifier onlyFromClaimOracle {

@@ -38,7 +38,7 @@ contract ClaimOracleDispatch {
   }
 
   function transfer(address _to, uint value) owneronly {
-    _to.send(value);
+    _to.transfer(value);
   }
 
   function kill() owneronly {

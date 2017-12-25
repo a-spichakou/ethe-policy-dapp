@@ -1,12 +1,8 @@
 var async = require('async');
 var Web3 = require('web3');
-var util = require('ethereumjs-util');
-var tx = require('ethereumjs-tx');
-var lightwallet = require('eth-lightwallet');
 var fs = require('fs');
 var sleep = require('sleep');
 
-// Interface of Agent 01
 var web3Agent01 = new Web3(
     new Web3.providers.HttpProvider('http://localhost:8501')
 );
@@ -143,7 +139,7 @@ async.waterfall(
 				function(err, data){
 					if (err) throw err;
 
-					console.log("Recived EventFromClaimOracle");
+					console.log("Recived event from Claim Oracle");
 					callback(err, config, contract, insuredContract);
 				});
 		}

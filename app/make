@@ -1,4 +1,5 @@
-echo Copy install JS scripts
+echo Making Policy contracts
+echo Copy JS scripts
 
 cp -r ./build/* ./target
 
@@ -7,7 +8,5 @@ node ./target/preproc.js
 echo Compiling Sol files
 solc --abi --bin --overwrite ./src/claimapi.sol --output-dir ./target/sol
 solc --abi --bin --overwrite ./src/policy.sol --output-dir ./target/sol
-solc --abi --bin --overwrite ./src/claimdispatch.sol --output-dir ./target/sol
-solc --abi --bin --overwrite ./src/claimoraclelookup.sol --output-dir ./target/sol
 
 ls ./target/sol -l

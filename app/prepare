@@ -9,10 +9,10 @@ echo Installing required modules globally
 cd ./target
 
 npm link web3
-npm link ethereumjs-util
-npm link ethereumjs-tx
-npm link eth-lightwallet
+#npm link ethereumjs-util
+#npm link ethereumjs-tx
+#npm link eth-lightwallet
 npm link async
-npm link sleep
 npm link replace-in-file
 npm link fs-extra
+npm link keccak

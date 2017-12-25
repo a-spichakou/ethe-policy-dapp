@@ -33,7 +33,7 @@ contract Policy is usingClaimOracle {
 	event Propouse();
 	event Accept();
 	event ClaimReported(bytes claimData);
-	event EventFromClaimOracle(bytes _response);
+	event EventFromClaimOracle(uint256 id, bytes _response);
 
     function Policy() {
         agent = msg.sender;    
@@ -73,7 +73,7 @@ contract Policy is usingClaimOracle {
 
 	function __claimOracleCallback(uint256 id, bytes _response) onlyFromClaimOracle external {
     	response = _response;
-    	EventFromClaimOracle(response);
+    	EventFromClaimOracle(id, response);
   	}
 
 	function getInsured() onlyAgent() constant returns (address) {
