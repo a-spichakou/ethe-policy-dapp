@@ -1,7 +1,6 @@
 var async = require('async');
 var Web3 = require('web3');
 var fs = require('fs');
-var sleep = require('sleep');
 
 var web3Agent01 = new Web3(
     new Web3.providers.HttpProvider('http://localhost:8501')
@@ -140,11 +139,11 @@ async.waterfall(
 					if (err) throw err;
 
 					console.log("Recived event from Claim Oracle");
-					callback(err, config, contract, insuredContract);
+					callback(null);
 				});
 		}
 	],
 	function(err, file) {
-		//callback(null);
+		process.exit();
 	}
 );

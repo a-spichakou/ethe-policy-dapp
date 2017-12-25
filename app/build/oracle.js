@@ -88,10 +88,11 @@ async.waterfall(
 			    }
 
 			    console.log("The file with claimOracleLookupContract saved to: " + __dirname + "/.claimOracleLookupContract.json");
+			    callback(null);
 			}); 
 		}
 	],
 	function(err, file) {
-		callback(null);
+		process.exit();
 	}
 );

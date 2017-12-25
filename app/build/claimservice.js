@@ -1,8 +1,5 @@
 var async = require("async");
 var Web3 = require("web3");
-var util = require("ethereumjs-util");
-var tx = require("ethereumjs-tx");
-var lightwallet = require("eth-lightwallet");
 var fs = require("fs");
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8503"));
