@@ -5,7 +5,7 @@ mkdir ./target
 
 cd ./target
 echo Installing required modules
-npm i web3 async replace-in-file keccak
+npm i web3@0.20.0 async replace-in-file keccak
 
 #npm link web3
 #npm link async

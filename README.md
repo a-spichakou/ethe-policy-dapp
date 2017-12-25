@@ -31,14 +31,13 @@ Also there is claimservice.js services that listens events from ClaimOracleDispa
 # Setup and Run
 
 ## Network setup
-* Download project
-* Run from root
+Download project and run from root
 
 > ./bin/init
 
 Init script will create required folders for the miner node and 3 other nodes (Agent's node, Insured's node and Provider (company)'s node)
 
-> ./bin/mine
+> ./bin/network-up
 This script will start miner node and boot node as at least one need to be in the network
 
 Open 3 more terminal windows and run
